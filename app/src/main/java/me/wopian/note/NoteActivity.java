@@ -17,6 +17,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -36,7 +38,9 @@ public class NoteActivity extends AppCompatActivity {
     }
 
     public String getNoteFilename () {
-        return Uri.encode(noteTitle) + ".txt";
+        String check = StringUtils.right(noteTitle, 4);
+        if (check.equals(".txt")) return Uri.encode(noteTitle);
+        else return Uri.encode(noteTitle) + ".txt";
     }
 
     public String setNoteTitle (String title) {
@@ -62,15 +66,12 @@ public class NoteActivity extends AppCompatActivity {
     }
 
     public void saveNote () {
-        String ext = ".txt";
-        String path = getNoteFilename() + ext;
-
         EditText noteText = findViewById(R.id.note_text);
         String data = noteText.getText().toString();
         FileOutputStream stream;
 
         try {
-            stream = openFileOutput(path, Context.MODE_PRIVATE);
+            stream = openFileOutput(getNoteFilename(), Context.MODE_PRIVATE);
             stream.write(data.getBytes());
             stream.close();
             Toast.makeText(this, "Saved Note", Toast.LENGTH_SHORT).show();
