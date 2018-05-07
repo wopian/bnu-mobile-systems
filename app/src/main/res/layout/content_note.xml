@@ -6,6 +6,6 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_margin="@dimen/text_margin"
-    android:gravity="top|left"
+    android:gravity="top|start"
     android:inputType="textMultiLine"
     app:layout_behavior="@string/appbar_scrolling_view_behavior" />
