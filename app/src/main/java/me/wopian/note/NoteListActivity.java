@@ -37,10 +37,11 @@ public class NoteListActivity extends AppCompatActivity {
 
     private void showNewNoteDialog (final Context context, final View view) {
         final EditText editText = new EditText(context);
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Add a new note");
-        builder.setView(editText);
-        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+
+        new AlertDialog.Builder(context)
+            .setTitle("Add a new note")
+            .setView(editText)
+            .setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String newNoteTitle = String.valueOf(editText.getText());
@@ -48,18 +49,17 @@ public class NoteListActivity extends AppCompatActivity {
                 // Default to current date time if no title set
                 if (newNoteTitle == null || newNoteTitle.isEmpty()) {
                     newNoteTitle = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
-                            .format(new Date());
+                        .format(new Date());
                 }
 
-                // TODO: Open Intent
                 Intent intent = new Intent(NoteListActivity.this, NoteActivity.class);
                 intent.putExtra("title", newNoteTitle);
                 startActivity(intent);
-            }
-        });
-        builder.setNegativeButton("Cancel", null);
-        AlertDialog dialog = builder.create();
-        dialog.show();
+                }
+            })
+            .setNegativeButton("Cancel", null)
+            .create()
+            .show();
     }
 
     @Override
@@ -80,10 +80,13 @@ public class NoteListActivity extends AppCompatActivity {
 
         notesRecycler = (RecyclerView) findViewById(R.id.notes_list);
         notesAdapter = new NotesAdapter(notesList);
+
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         notesRecycler.setLayoutManager(layoutManager);
         notesRecycler.setItemAnimator(new DefaultItemAnimator());
+
         notesRecycler.setAdapter(notesAdapter);
+
         getNoteFilesDir();
     }
 
@@ -98,6 +101,8 @@ public class NoteListActivity extends AppCompatActivity {
             if (!file.isFile()) { continue; }
 
             String title = Uri.decode(file.getName());
+            title = title.substring(0, title.lastIndexOf('.'));
+
             NotesBuilder note = new NotesBuilder(title);
             notesList.add(note);
         }
