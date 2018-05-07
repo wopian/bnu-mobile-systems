@@ -4,7 +4,7 @@
     tools:context="me.wopian.note.NoteActivity">
     <item
         android:id="@+id/action_save"
-        android:icon="@android:drawable/ic_menu_save"
+        android:icon="@drawable/ic_save_white_24dp"
         android:title="@string/action_save"
         app:showAsAction="always" />
 </menu>

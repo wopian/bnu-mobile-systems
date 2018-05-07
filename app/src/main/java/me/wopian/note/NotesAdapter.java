@@ -12,12 +12,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView title;
-        public TextView content;
 
         public ViewHolder (View view) {
             super(view);
             title = (TextView) view.findViewById(R.id.title);
-            content = (TextView) view.findViewById(R.id.content);
         }
     }
 
@@ -25,19 +23,22 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         this.notesList = notesList;
     }
 
+    // Create new views (invoked by the layout manager)
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        // create a new view
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.note_list_row, parent, false);
 
         return new ViewHolder(itemView);
     }
 
+    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder (ViewHolder holder, int position) {
         NotesBuilder note = notesList.get(position);
         holder.title.setText(note.getTitle());
-        holder.content.setText(note.getContent());
+        // holder.content.setText(note.getContent());
     }
 
     @Override

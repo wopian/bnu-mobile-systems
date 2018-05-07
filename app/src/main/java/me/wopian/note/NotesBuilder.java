@@ -8,16 +8,11 @@ public class NotesBuilder {
 
     }
 
-    public NotesBuilder (String title, String content) {
+    public NotesBuilder (String title) {
         this.title = title;
-        this.content = content;
     }
 
     public String getTitle () {
         return title;
-    }
-
-    public String getContent () {
-        return content;
     }
 }
