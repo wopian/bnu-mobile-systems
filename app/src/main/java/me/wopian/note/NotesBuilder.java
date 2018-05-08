@@ -3,11 +3,7 @@ package me.wopian.note;
 public class NotesBuilder {
     private String title;
 
-    public NotesBuilder () {
-
-    }
-
-    public NotesBuilder (String title) {
+    NotesBuilder(String title) {
         this.title = title;
     }
 

@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        app:cardElevation="1dp"
+        app:cardElevation="2dp"
+        app:cardCornerRadius="4dp"
         app:cardUseCompatPadding="true"
         app:contentPadding="8dp"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
@@ -30,7 +31,7 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/title"
+                android:id="@+id/card_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

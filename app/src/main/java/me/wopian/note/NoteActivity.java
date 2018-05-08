@@ -1,11 +1,13 @@
 package me.wopian.note;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -43,8 +45,12 @@ public class NoteActivity extends AppCompatActivity {
         else return Uri.encode(noteTitle) + ".txt";
     }
 
-    public String setNoteTitle (String title) {
-        return noteTitle = title;
+    public File getNoteFile () {
+        return getFileStreamPath(getNoteFilename());
+    }
+
+    private void setNoteTitle (String title) {
+        noteTitle = title;
     }
 
     @Override
@@ -65,22 +71,6 @@ public class NoteActivity extends AppCompatActivity {
         noteText.setText(getNoteContents());
     }
 
-    public void saveNote () {
-        EditText noteText = findViewById(R.id.note_text);
-        String data = noteText.getText().toString();
-        FileOutputStream stream;
-
-        try {
-            stream = openFileOutput(getNoteFilename(), Context.MODE_PRIVATE);
-            stream.write(data.getBytes());
-            stream.close();
-            Toast.makeText(this, "Saved Note", Toast.LENGTH_SHORT).show();
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Error: " + e.toString(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
     public String getNoteContents () {
         String data = "";
         String line;
@@ -96,7 +86,8 @@ public class NoteActivity extends AppCompatActivity {
             }
 
         } catch (FileNotFoundException e) {
-            Toast.makeText(this, "Exception: " + e.toString(), Toast.LENGTH_LONG).show();
+            // New note
+            //Toast.makeText(this, "Exception: " + e.toString(), Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             Toast.makeText(this, "Exception: " + e.toString(), Toast.LENGTH_LONG).show();
         }
@@ -111,19 +102,115 @@ public class NoteActivity extends AppCompatActivity {
         return true;
     }
 
+    public boolean clickBack () {
+        if (getParentActivityIntent() == null) {
+            onBackPressed();
+        } else {
+            NavUtils.navigateUpFromSameTask(this);
+        }
+        return true;
+    }
+
+    public boolean clickSave () {
+        EditText noteText = findViewById(R.id.note_text);
+        String data = noteText.getText().toString();
+        FileOutputStream stream;
+
+        try {
+            stream = openFileOutput(getNoteFilename(), Context.MODE_PRIVATE);
+            stream.write(data.getBytes());
+            stream.close();
+            Toast.makeText(this, "Saved Note", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error: " + e.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+        return true;
+    }
+
+    public boolean deleteNote (File file) {
+        if (file.delete()) {
+            Toast.makeText(this, "Deleted Note", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        Toast.makeText(this, "Note not deleted", Toast.LENGTH_SHORT).show();
+        return false;
+    }
+
+    public boolean clickDelete () {
+        final File file = getNoteFile();
+        if (!file.exists()) return false;
+
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
+                    case DialogInterface.BUTTON_POSITIVE:
+                        if (!deleteNote(file)) break;
+                        Intent intent = new Intent(NoteActivity.this, NoteListActivity.class);
+                        startActivity(intent);
+                        break;
+                }
+            }
+        };
+
+        new AlertDialog.Builder(this)
+            .setTitle("Delete note?")
+            .setPositiveButton("Yes", dialogClickListener)
+            .setNegativeButton("No", dialogClickListener)
+            .create()
+            .show();
+
+        return true;
+    }
+
+    public boolean clickEditTitle () {
+        final EditText editText = new EditText(NoteActivity.this);
+        editText.setText(getNoteTitle());
+
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
+                    case DialogInterface.BUTTON_POSITIVE:
+                        deleteNote(getNoteFile());
+                        setNoteTitle(String.valueOf(editText.getText()));
+                        getSupportActionBar().setTitle(getNoteTitle());
+                        clickSave();
+                        break;
+                }
+            }
+        };
+
+        new AlertDialog.Builder(this)
+            .setTitle("Edit note title")
+            .setView(editText)
+            .setPositiveButton("Save", dialogClickListener)
+            .setNegativeButton("Cancel", null)
+            .create()
+            .show();
+
+        return true;
+
+    }
+
     @Override
-    public synchronized boolean onOptionsItemSelected (MenuItem item) {
+    public boolean onOptionsItemSelected (MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (getParentActivityIntent() == null) {
-                    onBackPressed();
-                } else {
-                    NavUtils.navigateUpFromSameTask(this);
-                }
-                return true;
+                return clickBack();
             case R.id.action_save:
-                saveNote();
-                return true;
+                return clickSave();
+            case R.id.action_delete:
+                return clickDelete();
+            case R.id.action_edit_title:
+                return clickEditTitle();
             default:
                 return super.onOptionsItemSelected(item);
         }
