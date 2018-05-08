@@ -27,22 +27,22 @@ import java.io.InputStreamReader;
 public class NoteActivity extends AppCompatActivity {
     private String noteTitle;
 
-    public String getNoteTitle () {
+    public String getNoteTitle() {
         return noteTitle;
     }
 
-    public String getNoteFilename () {
+    private void setNoteTitle(String title) {
+        noteTitle = title;
+    }
+
+    public String getNoteFilename() {
         String check = StringUtils.right(noteTitle, 4);
         if (check.equals(".txt")) return Uri.encode(noteTitle);
         else return Uri.encode(noteTitle) + ".txt";
     }
 
-    public File getNoteFile () {
+    public File getNoteFile() {
         return getFileStreamPath(getNoteFilename());
-    }
-
-    private void setNoteTitle (String title) {
-        noteTitle = title;
     }
 
     @Override
@@ -63,7 +63,7 @@ public class NoteActivity extends AppCompatActivity {
         noteText.setText(getNoteContents());
     }
 
-    public String getNoteContents () {
+    public String getNoteContents() {
         String data = "";
         String line;
         InputStream stream;
@@ -73,7 +73,7 @@ public class NoteActivity extends AppCompatActivity {
             InputStreamReader reader = new InputStreamReader(stream);
             BufferedReader buffer = new BufferedReader(reader);
 
-            while((line = buffer.readLine()) != null) {
+            while ((line = buffer.readLine()) != null) {
                 data += line;
             }
 
@@ -94,7 +94,7 @@ public class NoteActivity extends AppCompatActivity {
         return true;
     }
 
-    public boolean clickBack () {
+    public boolean clickBack() {
         if (getParentActivityIntent() == null) {
             onBackPressed();
         } else {
@@ -103,7 +103,7 @@ public class NoteActivity extends AppCompatActivity {
         return true;
     }
 
-    public boolean clickSave () {
+    public boolean clickSave() {
         EditText noteText = findViewById(R.id.note_text);
         String data = noteText.getText().toString();
         FileOutputStream stream;
@@ -121,7 +121,7 @@ public class NoteActivity extends AppCompatActivity {
         return true;
     }
 
-    public boolean deleteNote (File file) {
+    public boolean deleteNote(File file) {
         if (file.delete()) {
             Toast.makeText(this, "Deleted Note", Toast.LENGTH_SHORT).show();
             return true;
@@ -131,7 +131,7 @@ public class NoteActivity extends AppCompatActivity {
         return false;
     }
 
-    public boolean clickDelete () {
+    public boolean clickDelete() {
         final File file = getNoteFile();
         if (!file.exists()) return false;
 
@@ -151,16 +151,16 @@ public class NoteActivity extends AppCompatActivity {
         };
 
         new AlertDialog.Builder(this)
-            .setTitle("Delete note?")
-            .setPositiveButton("Yes", dialogClickListener)
-            .setNegativeButton("No", dialogClickListener)
-            .create()
-            .show();
+                .setTitle("Delete note?")
+                .setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener)
+                .create()
+                .show();
 
         return true;
     }
 
-    public boolean clickEditTitle () {
+    public boolean clickEditTitle() {
         final EditText editText = new EditText(NoteActivity.this);
         editText.setText(getNoteTitle());
 
@@ -181,19 +181,19 @@ public class NoteActivity extends AppCompatActivity {
         };
 
         new AlertDialog.Builder(this)
-            .setTitle("Edit note title")
-            .setView(editText)
-            .setPositiveButton("Save", dialogClickListener)
-            .setNegativeButton("Cancel", null)
-            .create()
-            .show();
+                .setTitle("Edit note title")
+                .setView(editText)
+                .setPositiveButton("Save", dialogClickListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
 
         return true;
 
     }
 
     @Override
-    public boolean onOptionsItemSelected (MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 return clickBack();

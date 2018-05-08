@@ -27,35 +27,35 @@ public class NoteListActivity extends AppCompatActivity {
 
     private List<NotesBuilder> notesList = new ArrayList<>();
 
-    private void showNewNoteDialog (final Context context, final View view) {
+    private void showNewNoteDialog(final Context context, final View view) {
         final EditText editText = new EditText(context);
 
         new AlertDialog.Builder(context)
-            .setTitle("Add a new note")
-            .setView(editText)
-            .setPositiveButton("Add", new DialogInterface.OnClickListener() {
-            @SuppressLint("SimpleDateFormat")
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String newNoteTitle = String.valueOf(editText.getText());
+                .setTitle("Add a new note")
+                .setView(editText)
+                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                    @SuppressLint("SimpleDateFormat")
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String newNoteTitle = String.valueOf(editText.getText());
 
-                // Default to current date time if no title set
-                if (newNoteTitle == null || newNoteTitle.isEmpty()) {
-                    newNoteTitle = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
-                        .format(new Date());
-                }
+                        // Default to current date time if no title set
+                        if (newNoteTitle == null || newNoteTitle.isEmpty()) {
+                            newNoteTitle = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
+                                    .format(new Date());
+                        }
 
-                Intent intent = new Intent(NoteListActivity.this, NoteActivity.class);
-                intent.putExtra("title", newNoteTitle);
-                startActivity(intent);
-                }
-            })
-            .setNegativeButton("Cancel", null)
-            .create()
-            .show();
+                        Intent intent = new Intent(NoteListActivity.this, NoteActivity.class);
+                        intent.putExtra("title", newNoteTitle);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
     }
 
-    private List<NotesBuilder> getNotes () {
+    private List<NotesBuilder> getNotes() {
         List<NotesBuilder> list = new ArrayList<>();
         File[] files = getFilesDir().listFiles();
 
@@ -75,7 +75,7 @@ public class NoteListActivity extends AppCompatActivity {
         return list;
     }
 
-    private void listNotes () {
+    private void listNotes() {
         RecyclerView notesRecycler = (RecyclerView) findViewById(R.id.notes_list);
         NotesAdapter notesAdapter = new NotesAdapter(getNotes());
 
@@ -87,7 +87,7 @@ public class NoteListActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onCreate (Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_list);
 
@@ -106,7 +106,7 @@ public class NoteListActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onRestart () {
+    protected void onRestart() {
         super.onRestart();
         listNotes();
     }

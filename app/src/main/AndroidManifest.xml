@@ -21,9 +21,9 @@
         <activity
             android:name=".NoteActivity"
             android:label="@string/title_activity_note"
+            android:parentActivityName=".NoteListActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize"
-            android:parentActivityName=".NoteListActivity"/>
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

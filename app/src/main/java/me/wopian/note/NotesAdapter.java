@@ -15,34 +15,7 @@ import java.util.List;
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> {
     private List<NotesBuilder> notesList;
 
-    public class ViewHolder
-        extends RecyclerView.ViewHolder
-        implements View.OnClickListener, View.OnLongClickListener {
-
-        public TextView title;
-
-        ViewHolder (View view) {
-            super(view);
-            title = view.findViewById(R.id.card_title);
-            view.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick (View view) {
-            Context context = view.getContext();
-            Intent intent = new Intent(context, NoteActivity.class);
-            intent.putExtra("title", title.getText());
-            context.startActivity(intent);
-        }
-
-        @Override
-        public boolean onLongClick (View view) {
-            Toast.makeText(view.getContext(), "Long press", Toast.LENGTH_SHORT).show();
-            return true;
-        }
-    }
-
-    NotesAdapter (List<NotesBuilder> notesList) {
+    NotesAdapter(List<NotesBuilder> notesList) {
         this.notesList = notesList;
     }
 
@@ -59,15 +32,42 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder (@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         NotesBuilder note = notesList.get(position);
         holder.title.setText(note.getTitle());
         // holder.content.setText(note.getContent());
     }
 
     @Override
-    public int getItemCount () {
+    public int getItemCount() {
         return notesList.size();
+    }
+
+    public class ViewHolder
+            extends RecyclerView.ViewHolder
+            implements View.OnClickListener, View.OnLongClickListener {
+
+        public TextView title;
+
+        ViewHolder(View view) {
+            super(view);
+            title = view.findViewById(R.id.card_title);
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            Context context = view.getContext();
+            Intent intent = new Intent(context, NoteActivity.class);
+            intent.putExtra("title", title.getText());
+            context.startActivity(intent);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            Toast.makeText(view.getContext(), "Long press", Toast.LENGTH_SHORT).show();
+            return true;
+        }
     }
 }
 
