@@ -9,7 +9,7 @@
 *.class
 
 # Generated files
-bin/
+bin/*
 gen/
 out/
 
@@ -66,3 +66,13 @@ fastlane/readme.md
 
 # Release APK
 app/release
+
+# LaTeX
+report/out
+report/pyg
+*.pdf
+!bin/latex_workshop_hotfix
+!bin/pyg
+!bin/pyg_defs
+!bin/report
+!bin/tex
