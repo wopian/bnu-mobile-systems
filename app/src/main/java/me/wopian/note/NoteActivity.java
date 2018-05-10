@@ -37,8 +37,11 @@ public class NoteActivity extends AppCompatActivity {
 
     public String getNoteFilename() {
         String check = StringUtils.right(noteTitle, 4);
-        if (check.equals(".txt")) return Uri.encode(noteTitle);
-        else return Uri.encode(noteTitle) + ".txt";
+        if (check.equals(".txt")) {
+            return Uri.encode(noteTitle);
+        } else {
+            return Uri.encode(noteTitle) + ".txt";
+        }
     }
 
     public File getNoteFile() {
@@ -135,20 +138,22 @@ public class NoteActivity extends AppCompatActivity {
         final File file = getNoteFile();
         if (!file.exists()) return false;
 
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        break;
-                    case DialogInterface.BUTTON_POSITIVE:
-                        if (!deleteNote(file)) break;
-                        Intent intent = new Intent(NoteActivity.this, NoteListActivity.class);
-                        startActivity(intent);
-                        break;
-                }
-            }
-        };
+        DialogInterface.OnClickListener dialogClickListener =
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                break;
+                            case DialogInterface.BUTTON_POSITIVE:
+                                if (!deleteNote(file)) break;
+                                Intent intent = new Intent(NoteActivity.this,
+                                        NoteListActivity.class);
+                                startActivity(intent);
+                                break;
+                        }
+                    }
+                };
 
         new AlertDialog.Builder(this)
                 .setTitle("Delete note?")
@@ -164,21 +169,22 @@ public class NoteActivity extends AppCompatActivity {
         final EditText editText = new EditText(NoteActivity.this);
         editText.setText(getNoteTitle());
 
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        break;
-                    case DialogInterface.BUTTON_POSITIVE:
-                        deleteNote(getNoteFile());
-                        setNoteTitle(String.valueOf(editText.getText()));
-                        getSupportActionBar().setTitle(getNoteTitle());
-                        clickSave();
-                        break;
-                }
-            }
-        };
+        DialogInterface.OnClickListener dialogClickListener =
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                break;
+                            case DialogInterface.BUTTON_POSITIVE:
+                                deleteNote(getNoteFile());
+                                setNoteTitle(String.valueOf(editText.getText()));
+                                getSupportActionBar().setTitle(getNoteTitle());
+                                clickSave();
+                                break;
+                        }
+                    }
+                };
 
         new AlertDialog.Builder(this)
                 .setTitle("Edit note title")
