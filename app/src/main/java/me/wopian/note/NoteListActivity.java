@@ -20,6 +20,8 @@ import android.widget.EditText;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -59,12 +61,24 @@ public class NoteListActivity extends AppCompatActivity {
         List<NotesBuilder> list = new ArrayList<>();
         File[] files = getFilesDir().listFiles();
 
+        // List notes by most recently edited
+        Arrays.sort(files, new Comparator<File>() {
+            @Override
+            public int compare(File o1, File o2) {
+                // Requires SDK 19+
+                // return Long.compare(o1.lastModified(), o2.lastModified());
+                return Long.valueOf(o2.lastModified())
+                        .compareTo(o1.lastModified());
+            }
+        });
+
         for (File file : files) {
             // Ignore directories in private app folder
             if (!file.isFile()) {
                 continue;
             }
 
+            // Get the proper title of the note
             String title = Uri.decode(file.getName());
             title = title.substring(0, title.lastIndexOf('.'));
 
@@ -78,11 +92,9 @@ public class NoteListActivity extends AppCompatActivity {
     private void listNotes() {
         RecyclerView notesRecycler = (RecyclerView) findViewById(R.id.notes_list);
         NotesAdapter notesAdapter = new NotesAdapter(getNotes());
-
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         notesRecycler.setLayoutManager(layoutManager);
         notesRecycler.setItemAnimator(new DefaultItemAnimator());
-
         notesRecycler.setAdapter(notesAdapter);
     }
 
@@ -102,9 +114,11 @@ public class NoteListActivity extends AppCompatActivity {
             }
         });
 
+        // Populate recyclerView with notes
         listNotes();
     }
 
+    // Force a refresh of the notes list when pressing hardware back-button
     @Override
     protected void onRestart() {
         super.onRestart();

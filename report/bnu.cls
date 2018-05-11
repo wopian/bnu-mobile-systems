@@ -7,7 +7,7 @@
 \RequirePackage[british]{babel}
 \let\latinencoding\relax
 \RequirePackage[a4paper, portrait]{geometry}
-\RequirePackage{subfiles}
+% \RequirePackage{subfiles}
 \RequirePackage{enumitem}
 \RequirePackage[useregional]{datetime2}
 \RequirePackage{natbib}
@@ -16,6 +16,7 @@
 \addto\captionsbritish{\renewcommand{\bibname}{References}}
 % Image
 \RequirePackage{float}
+\RequirePackage{subcaption}
 \RequirePackage{graphicx}
 % Chapter, Part and Section numbering
 \RequirePackage{tocloft}
