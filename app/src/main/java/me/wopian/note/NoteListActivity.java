@@ -13,6 +13,8 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -81,8 +83,9 @@ public class NoteListActivity extends AppCompatActivity {
             // Get the proper title of the note
             String title = Uri.decode(file.getName());
             title = title.substring(0, title.lastIndexOf('.'));
+            String ago = DateUtils.getRelativeTimeSpanString(file.lastModified()).toString();
 
-            NotesBuilder note = new NotesBuilder(title);
+            NotesBuilder note = new NotesBuilder(title, ago);
             list.add(note);
         }
 

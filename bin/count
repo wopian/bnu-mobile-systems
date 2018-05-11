@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+bin="$(dirname $0)"
+bash -c "$bin/texcount report/index.tex -inc -merge -sum -total -dir";

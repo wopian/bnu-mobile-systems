@@ -76,3 +76,5 @@ report/pyg
 !bin/pyg_defs
 !bin/report
 !bin/tex
+!bin/count
+!bin/texcount

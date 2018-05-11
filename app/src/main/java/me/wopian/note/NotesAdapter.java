@@ -35,7 +35,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         NotesBuilder note = notesList.get(position);
         holder.title.setText(note.getTitle());
-        // holder.content.setText(note.getContent());
+        holder.ago.setText(note.getAgo());
     }
 
     @Override
@@ -48,10 +48,12 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
             implements View.OnClickListener, View.OnLongClickListener {
 
         public TextView title;
+        public TextView ago;
 
         ViewHolder(View view) {
             super(view);
             title = view.findViewById(R.id.card_title);
+            ago = view.findViewById(R.id.card_ago);
             view.setOnClickListener(this);
         }
 

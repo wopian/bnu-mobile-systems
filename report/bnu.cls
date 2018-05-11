@@ -17,6 +17,8 @@
 % Image
 \RequirePackage{float}
 \RequirePackage{subcaption}
+\RequirePackage{chngcntr}
+\counterwithin{subfigure}{figure}
 \RequirePackage{graphicx}
 % Chapter, Part and Section numbering
 \RequirePackage{tocloft}

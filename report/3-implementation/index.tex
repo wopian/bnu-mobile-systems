@@ -1,6 +1,46 @@
 % !TeX root = ../index.tex
 \chapter{Implementation}
 
-\section{Main Activity}
+While the default colour scheme for Android Studio projects is a blue primary colour and a pink accent, no other colour combination looked \textit{right}, so have kept the default colour scheme as the main theme of the app.
 
-\section{Note Activity}
+\section{Creating Notes}
+
+Implementing the Floating Action Button to display a dialog was the first thing I did. An \texttt{OnClickListener} is registered to the button which calls the \texttt{showNewNoteDialog} method. This method builds an \texttt{AlertDialog} and has an input for the user to enter their note title. This input is optional and the current date and time will be used as the note title if it is blank. On a positive dismissal of the dialog, an Intent is sent to the \texttt{NoteActivity} class with the note title passed along with the intent.
+
+As SDK 17 has to be targeted, Java's new Time class cannot be used (SDK >= 23) so getting the current time was not as simple as \texttt{Instant.now()}.
+
+In the \texttt{NoteActivity} class, the note title from the intent is set as the action bar title. The layout for this activity is wrapped within a \texttt{CoordinatorLayout} component with the layout below the toolbar boilerplate being just a single multi-line \texttt{EditText} component.
+
+\section{Saving Notes}
+
+The next step was to be able to save notes. The notes will be saved as text files in the app's private directory. The note title is Uri encoded to generate a safe string to use as the file name - \texttt{"Hello World"} becomes \texttt{"Hello\%20World.txt"}. The contents of the note is written to the device using an Output Stream.
+
+The private directory on the devices is located at \texttt{/data/data/me.wopian.note/files}. Users can only access this location outside of the app if their device is rooted and they grant temporary root access to a file explorer app.
+
+\section{Listing Notes}
+
+To list the notes created within the app, I made use of the \texttt{getFilesDir} method provided by the \texttt{File} Java class. With this method I had an array of all the files in the app's private directory. I used a for each loop to go through each file and check it is a file and not a directory which are skipped. Next I decoded the note title from the filename and stripped the file extension by trimming everything after the last \texttt{.}. Finally a new note instance is created and added to an array.
+
+To render the list of notes in the app I decided to use a Recycler View. This was fairly straight forward to get a list of note titles to be displayed. I then added a click event listener that created an Intent for the note. With this notes can now be created, saved and edited within the app.
+
+Unfortunately I could not use the \texttt{compare} method of \texttt{Long} as it required a minimum SDK version of 19, so I had to get the value of the \texttt{Long} and then use the more verbose alternative:
+
+\texttt{return Long.valueOf(o2.lastModified()).compareTo(o1.lastModified());}
+
+\texttt{return Long.compare(o1.lastModified(), o2.lastModified());}
+
+\section{Deleting Notes}
+
+I then attempted to add a long-click to multi-select notes to be able to delete  in bulk. However, I could not get the card in the Recycler View to trigger the \texttt{OnLongClick} event listener registered to it which unfortunately prevented me from fully implementing a settings page for the app - with the settings icon removed from the start page toolbar.
+
+As I was unable to get how I wanted to delete notes implemented I instead opted for an individual delete icon in the note editor toolbar. When clicked it prompts the user with a Yes/No dialog. If the user clicks Yes then it deletes the note's file and returns the user back to the start page via an Intent.
+
+\section{Features Not Implemented}
+
+\begin{itemize}
+  \item Bulk deletion on the start page
+  \item Sorting notes, e.g alphabetically, by date created or last modified.
+  \item Settings to change where the notes are stored
+  \item Settings to change the application theme
+  \item Settings to change the application language
+\end{itemize}
